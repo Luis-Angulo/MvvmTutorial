@@ -9,8 +9,8 @@
             Name = name;
             _ReservationBook = new();
         }
-        public IEnumerable<Reservation> GetReservationsByUserName(string userName)
-            => _ReservationBook.GetReservationsByUser(userName);
+        public IEnumerable<Reservation> GetAllReservations()
+            => _ReservationBook.GetAllReservations();
 
         public void MakeReservation(Reservation reservation)
             => _ReservationBook.AddReservation(reservation);
