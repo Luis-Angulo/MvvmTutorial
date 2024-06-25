@@ -6,7 +6,7 @@
         public RoomId RoomId { get; }
         public DateTime StartTime { get; }
         public DateTime EndTime { get; }
-        public TimeSpan length => EndTime.Subtract(StartTime);
+        public TimeSpan Length => EndTime.Subtract(StartTime);
         public Reservation(string userName, RoomId roomId, DateTime startTime, DateTime endTime)
         {
             UserName = userName;
@@ -18,7 +18,8 @@
         public bool Conflicts(Reservation reservation)
         {
             // Different rooms cannot conflict, no matter the time of the reservation of each
-            if (reservation.RoomId != RoomId)
+            // TODO: Don't like this but following the tutorial, may remove later to use .Equals, see RoomId code
+            if (!reservation.RoomId.Equals(RoomId))
             {
                 return false;
             }
