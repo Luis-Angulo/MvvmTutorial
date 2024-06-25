@@ -4,6 +4,11 @@
     {
         public int FloorNumber { get; }
         public int RoomNumber { get; }
+        public RoomId(int floorNumber, int roomNumber)
+        {
+            FloorNumber = floorNumber;
+            RoomNumber = roomNumber;
+        }
         // TODO: Don't like this but following the tutorial
         public override string ToString()
         {
