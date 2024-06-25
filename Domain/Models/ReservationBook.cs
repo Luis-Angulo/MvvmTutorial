@@ -10,9 +10,8 @@ namespace Domain.Models
         {
             _Reservations = [];
         }
-        public IEnumerable<Reservation> GetReservationsByUser(string userName) =>
-            _Reservations.
-                Where(r => r.UserName == userName);
+        public IEnumerable<Reservation> GetAllReservations() =>
+            _Reservations;
 
         public void AddReservation(Reservation newReservation)
         {
