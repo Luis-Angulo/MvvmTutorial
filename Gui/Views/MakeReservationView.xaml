@@ -1,0 +1,117 @@
+﻿<UserControl x:Class="Gui.Views.MakeReservationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Gui.Views"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <Grid Grid.IsSharedSizeScope="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <!-- Header -->
+        <TextBlock Grid.Row="0"
+                   FontSize="24"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   Text="Make Reservation" />
+        <!-- Name input control group -->
+        <Grid Grid.Row="1"
+              Margin="0,25,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       FontSize="16"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Text="Username" />
+            <TextBox Grid.Row="1"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Center"
+                     Margin="0,5,0,0"
+                     Text="Placeholder_Username" />
+        </Grid>
+        
+        <!-- Floor and room number control group -->
+        <Grid Grid.Row="2"
+              Margin="0,10,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"
+                                  SharedSizeGroup="FirstColumn" />
+                <ColumnDefinition Width="auto"
+                                  SharedSizeGroup="SecondColumn" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0"
+                       Grid.Column="0"
+                       FontSize="16"
+                       Text="Floor No." />
+            <TextBox Grid.Row="1"
+                     Grid.Column="0"
+                     Margin="0,5,0,0"
+                     Text="Placeholder" />
+            <TextBlock Grid.Row="0"
+                       Grid.Column="1"
+                       FontSize="16"
+                       Margin="10,0,0,0"
+                       Text="Room No." />
+            <TextBox Grid.Row="1"
+                     Grid.Column="1"
+                     Margin="10,5,0,0"
+                     Text="Placeholder" />
+        </Grid>
+
+        <!-- Start and end date control group -->
+        <Grid Grid.Row="3"
+              Margin="0,10,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"
+                                  SharedSizeGroup="FirstColumn" />
+                <ColumnDefinition Width="auto"
+                                  SharedSizeGroup="SecondColumn" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0"
+                       Grid.Column="0"
+                       FontSize="16"
+                       Text="Start date" />
+            <DatePicker Grid.Row="1"
+                        Margin="0,5,0,0"
+                        Grid.Column="0" />
+            <TextBlock Grid.Row="0"
+                       Grid.Column="1"
+                       FontSize="16"
+                       Margin="10,0,0,0"
+                       Text="End date" />
+            <DatePicker Grid.Row="1"
+                        Margin="10,5,0,0"
+                        Grid.Column="1" />
+        </Grid>
+
+        <!-- Submit and Cancel control group -->
+        <StackPanel Grid.Row="4"
+                    Margin="0,25,0,0"
+                    Orientation="Horizontal">
+            <Button Content="Submit" />
+            <Button Content="Cancel"
+                    Margin="10,0,0,0" />
+        </StackPanel>
+
+    </Grid>
+</UserControl>
