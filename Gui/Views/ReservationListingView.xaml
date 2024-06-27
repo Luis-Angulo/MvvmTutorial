@@ -36,8 +36,7 @@
         </Grid>
         <ListView Grid.Row="1"
                   Margin="0,25,0,0"
-                  ItemsSource="{Binding Reservations}"
-                  >
+                  ItemsSource="{Binding Reservations}">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment"
@@ -50,28 +49,33 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <!-- TODO: Why won't the centering work without the Stretch content property? -->
-                                <TextBlock Padding="20,0,0,0" Text="{Binding RoomId}" HorizontalAlignment="Center" />
+                                <TextBlock Padding="20,0,0,0"
+                                           Text="{Binding RoomId}"
+                                           HorizontalAlignment="Center" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Username">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Padding="20,0,0,0" Text="{Binding UserName}" />
+                                <TextBlock Padding="20,0,0,0"
+                                           Text="{Binding UserName}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Start Date">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Padding="20,0,0,0" Text="{Binding }" />
+                                <TextBlock Padding="20,0,0,0"
+                                           Text="{Binding StartDate}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="End Date">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Padding="20,0,0,0" Text="12/28/2024" />
+                                <TextBlock Padding="20,0,0,0"
+                                           Text="{Binding EndDate}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

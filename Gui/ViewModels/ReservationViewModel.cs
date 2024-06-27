@@ -8,8 +8,8 @@ namespace Gui.ViewModels
         private Reservation _Reservation;
         public string UserName => _Reservation.UserName;
         public string RoomId => _Reservation.RoomId.ToString();
-        public DateTime StartTime => _Reservation.StartTime;
-        public DateTime EndTime => _Reservation.EndTime;
+        public string StartDate => _Reservation.StartTime.ToString("d");
+        public string EndDate => _Reservation.EndTime.ToString("d");
 
         public ReservationViewModel(Reservation r)
         {

@@ -34,14 +34,10 @@
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0"
                        FontSize="16"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Center"
                        Text="Username" />
             <TextBox Grid.Row="1"
-                     HorizontalAlignment="Left"
-                     VerticalAlignment="Center"
                      Margin="0,5,0,0"
-                     Text="{Binding UserName}" />
+                     Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
         
         <!-- Floor and room number control group -->

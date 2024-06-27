@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gui"
         xmlns:views="clr-namespace:Gui.Views"
+        xmlns:vms="clr-namespace:Gui.ViewModels"
         mc:Ignorable="d"
         Title="MainWindow"
         FontSize="14"
@@ -12,6 +13,6 @@
         Width="800">
     <Grid Margin="20,10"
           MaxWidth="600">
-        <views:MakeReservationView />
+        <views:ReservationListingView DataContext="{Binding CurrentViewModel}" />
     </Grid>
 </Window>
