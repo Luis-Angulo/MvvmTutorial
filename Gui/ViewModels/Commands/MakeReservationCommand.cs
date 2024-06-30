@@ -1,5 +1,6 @@
 ﻿using Domain.Exceptions;
 using Domain.Models;
+using System.ComponentModel;
 using System.Windows;
 
 namespace Gui.ViewModels.Commands
@@ -12,6 +13,13 @@ namespace Gui.ViewModels.Commands
         {
             _Hotel = hotel;
             _Vm = vm;
+            _Vm.PropertyChanged += OnViewModelPropertyChanged;
+        }
+        public override bool CanExecute(object? parameter)
+        {
+            return !string.IsNullOrEmpty(_Vm.UserName)
+                && _Vm.FloorNumber > 0
+                && base.CanExecute(parameter);
         }
         public override void Execute(object? parameter)
         {
@@ -39,6 +47,15 @@ namespace Gui.ViewModels.Commands
                     , MessageBoxButton.OK
                     , MessageBoxImage.Error
                     );
+            }
+        }
+        private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (
+                (e.PropertyName == nameof(MakeReservationViewModel.UserName))
+                || (e.PropertyName == nameof(MakeReservationViewModel.FloorNumber)))
+            {
+                OnCanExecuteChanged();
             }
         }
     }

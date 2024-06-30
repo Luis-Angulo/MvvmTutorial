@@ -14,7 +14,7 @@ namespace Gui.ViewModels
             set
             {
                 _UserName = value;
-                OnPropertyChanged(nameof(_UserName));
+                OnPropertyChanged(nameof(UserName));
             }
         }
         private int _FloorNumber;
@@ -24,7 +24,7 @@ namespace Gui.ViewModels
             set
             {
                 _FloorNumber = value;
-                OnPropertyChanged(nameof(_FloorNumber));
+                OnPropertyChanged(nameof(FloorNumber));
             }
         }
         private int _RoomNumber;
@@ -34,7 +34,7 @@ namespace Gui.ViewModels
             set
             {
                 _RoomNumber = value;
-                OnPropertyChanged(nameof(_RoomNumber));
+                OnPropertyChanged(nameof(RoomNumber));
             }
         }
         private DateTime _StartDate;
@@ -44,7 +44,7 @@ namespace Gui.ViewModels
             set
             {
                 _StartDate = value;
-                OnPropertyChanged(nameof(_StartDate));
+                OnPropertyChanged(nameof(StartDate));
             }
         }
         private DateTime _EndDate;
@@ -54,7 +54,7 @@ namespace Gui.ViewModels
             set
             {
                 _EndDate = value;
-                OnPropertyChanged(nameof(_EndDate));
+                OnPropertyChanged(nameof(EndDate));
             }
         }
         public ICommand SubmitCommand { get; }
