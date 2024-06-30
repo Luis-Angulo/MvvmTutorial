@@ -1,4 +1,5 @@
 ﻿using Gui.ViewModels.Abstractions;
+using Domain.Models;
 
 namespace Gui.ViewModels
 {
@@ -7,7 +8,7 @@ namespace Gui.ViewModels
         public ViewModelBase CurrentViewModel { get; }
         public MainViewModel()
         {
-            CurrentViewModel = new ReservationListingViewModel();
+            CurrentViewModel = new MakeReservationViewModel();
         }
     }
 }

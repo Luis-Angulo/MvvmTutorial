@@ -1,4 +1,5 @@
 ﻿using Gui.ViewModels.Abstractions;
+using Gui.ViewModels.Commands;
 using System.Windows.Input;
 
 namespace Gui.ViewModels
@@ -57,5 +58,11 @@ namespace Gui.ViewModels
         }
         public ICommand SubmitCommand { get; }
         public ICommand CancelCommand { get; }
+
+        public MakeReservationViewModel()
+        {   
+            SubmitCommand = new MakeReservationCommand();
+            CancelCommand = new CancelReservationCommand();
+        }
     }
 }
