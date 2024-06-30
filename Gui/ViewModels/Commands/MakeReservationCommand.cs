@@ -1,4 +1,6 @@
-﻿using Domain.Models;
+﻿using Domain.Exceptions;
+using Domain.Models;
+using System.Windows;
 
 namespace Gui.ViewModels.Commands
 {
@@ -19,7 +21,25 @@ namespace Gui.ViewModels.Commands
                 , _Vm.StartDate
                 , _Vm.EndDate
                 );
-            _Hotel.MakeReservation(res);
+            try
+            {
+                _Hotel.MakeReservation(res);
+                MessageBox.Show(
+                    "Reservation created"
+                    , "Success"
+                    , MessageBoxButton.OK
+                    , MessageBoxImage.Information
+                    );
+            }
+            catch (ReservationConflictException)
+            {
+                MessageBox.Show(
+                    "This room is already taken"
+                    , "Error"
+                    , MessageBoxButton.OK
+                    , MessageBoxImage.Error
+                    );
+            }
         }
     }
 }

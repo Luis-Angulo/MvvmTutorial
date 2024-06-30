@@ -64,6 +64,8 @@ namespace Gui.ViewModels
         {   
             SubmitCommand = new MakeReservationCommand(hotel, this);
             CancelCommand = new CancelReservationCommand();
+            _StartDate = DateTime.Now;
+            _EndDate = DateTime.Now.AddDays(1);
         }
     }
 }
