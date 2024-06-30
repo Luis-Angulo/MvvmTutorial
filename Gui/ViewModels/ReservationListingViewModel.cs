@@ -1,4 +1,5 @@
 ﻿using Gui.ViewModels.Abstractions;
+using Gui.ViewModels.Commands;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -12,6 +13,7 @@ namespace Gui.ViewModels
         public ReservationListingViewModel()
         {
             _Reservations = new ObservableCollection<ReservationViewModel>();
+            MakeReservationCommand = new NavigateCommand();
             // TODO: Remove Test Data
             _Reservations.Add(new ReservationViewModel(new("Luis", new(12, 24), DateTime.Now, DateTime.Now)));
             _Reservations.Add(new ReservationViewModel(new("Paco", new(12, 32), DateTime.Now, DateTime.Now)));
