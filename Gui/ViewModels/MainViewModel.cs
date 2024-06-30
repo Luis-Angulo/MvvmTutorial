@@ -6,9 +6,9 @@ namespace Gui.ViewModels
     public class MainViewModel : ViewModelBase
     {
         public ViewModelBase CurrentViewModel { get; }
-        public MainViewModel()
+        public MainViewModel(Hotel hotel)
         {
-            CurrentViewModel = new MakeReservationViewModel();
+            CurrentViewModel = new MakeReservationViewModel(hotel);
         }
     }
 }
