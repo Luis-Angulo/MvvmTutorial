@@ -27,10 +27,16 @@ namespace Gui
             //base.OnStartup(e);
         }
         private MakeReservationViewModel ProvideMakeReservationViewModel()
-            => new MakeReservationViewModel(_Hotel, _NavigationStore, ProvideReservationListViewModel);
+            => new MakeReservationViewModel(
+                _Hotel
+                ,new(_NavigationStore, ProvideReservationListViewModel)
+                );
 
         private ReservationListingViewModel ProvideReservationListViewModel()
-            => new ReservationListingViewModel(_Hotel, _NavigationStore, ProvideMakeReservationViewModel);
+            => new ReservationListingViewModel(
+                _Hotel
+                ,new(_NavigationStore, ProvideMakeReservationViewModel)
+                );
 
     }
 

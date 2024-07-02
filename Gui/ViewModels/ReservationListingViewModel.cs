@@ -1,5 +1,5 @@
 ﻿using Domain.Models;
-using Gui.Stores;
+using Gui.Services;
 using Gui.ViewModels.Abstractions;
 using Gui.ViewModels.Commands;
 using System.Collections.ObjectModel;
@@ -13,10 +13,10 @@ namespace Gui.ViewModels
         public IEnumerable<ReservationViewModel> Reservations => _Reservations;
         public ICommand MakeReservationCommand { get; }
         private Hotel _Hotel { get; }
-        public ReservationListingViewModel(Hotel hotel, NavigationStore navStore, Func<MakeReservationViewModel> viewModelProvider)
+        public ReservationListingViewModel(Hotel hotel, NavigationService navigationService)
         {
             _Reservations = new ObservableCollection<ReservationViewModel>();
-            MakeReservationCommand = new NavigateCommand(navStore, viewModelProvider);
+            MakeReservationCommand = new NavigateCommand(navigationService);
             _Hotel = hotel;
 
             UpdateReservations();

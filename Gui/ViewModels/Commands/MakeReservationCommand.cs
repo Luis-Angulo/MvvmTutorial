@@ -1,5 +1,6 @@
 ﻿using Domain.Exceptions;
 using Domain.Models;
+using Gui.Services;
 using System.ComponentModel;
 using System.Windows;
 
@@ -9,10 +10,13 @@ namespace Gui.ViewModels.Commands
     {
         private readonly Hotel _Hotel;
         private readonly MakeReservationViewModel _Vm;
-        public MakeReservationCommand(Hotel hotel, MakeReservationViewModel vm)
+        private readonly NavigationService _NavigationService;
+
+        public MakeReservationCommand(Hotel hotel, MakeReservationViewModel vm, NavigationService navigationService)
         {
             _Hotel = hotel;
             _Vm = vm;
+            _NavigationService = navigationService;
             _Vm.PropertyChanged += OnViewModelPropertyChanged;
         }
         public override bool CanExecute(object? parameter)
@@ -38,6 +42,7 @@ namespace Gui.ViewModels.Commands
                     , MessageBoxButton.OK
                     , MessageBoxImage.Information
                     );
+                _NavigationService.Navigate();
             }
             catch (ReservationConflictException)
             {
