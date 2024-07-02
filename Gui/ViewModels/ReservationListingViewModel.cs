@@ -1,4 +1,5 @@
-﻿using Gui.ViewModels.Abstractions;
+﻿using Gui.Stores;
+using Gui.ViewModels.Abstractions;
 using Gui.ViewModels.Commands;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -10,10 +11,10 @@ namespace Gui.ViewModels
         private ObservableCollection<ReservationViewModel> _Reservations;
         public IEnumerable<ReservationViewModel> Reservations => _Reservations;
         public ICommand MakeReservationCommand { get; }
-        public ReservationListingViewModel()
+        public ReservationListingViewModel(NavigationStore navStore)
         {
             _Reservations = new ObservableCollection<ReservationViewModel>();
-            MakeReservationCommand = new NavigateCommand();
+            MakeReservationCommand = new NavigateCommand(navStore);
             // TODO: Remove Test Data
             _Reservations.Add(new ReservationViewModel(new("Luis", new(12, 24), DateTime.Now, DateTime.Now)));
             _Reservations.Add(new ReservationViewModel(new("Paco", new(12, 32), DateTime.Now, DateTime.Now)));

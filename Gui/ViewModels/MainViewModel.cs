@@ -11,6 +11,11 @@ namespace Gui.ViewModels
         public MainViewModel(NavigationStore navigationStore)
         {
             _NavigationStore = navigationStore;
+            _NavigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;  // Add delegate to trigger WPF repaint
+        }
+        private void OnCurrentViewModelChanged()
+        {
+            OnPropertyChanged(nameof(CurrentViewModel));
         }
     }
 }

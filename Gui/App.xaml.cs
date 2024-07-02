@@ -18,7 +18,7 @@ namespace Gui
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            _NavigationStore.CurrentViewModel = new ReservationListingViewModel();
+            _NavigationStore.CurrentViewModel = new ReservationListingViewModel(_NavigationStore);
             MainWindow = new MainWindow() { DataContext = new MainViewModel(_NavigationStore) };
             MainWindow.Show();
 
