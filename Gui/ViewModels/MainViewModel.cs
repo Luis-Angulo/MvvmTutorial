@@ -1,14 +1,16 @@
 ﻿using Gui.ViewModels.Abstractions;
 using Domain.Models;
+using Gui.Stores;
 
 namespace Gui.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        public ViewModelBase CurrentViewModel { get; }
-        public MainViewModel(Hotel hotel)
+        private NavigationStore _NavigationStore;
+        public ViewModelBase CurrentViewModel => _NavigationStore.CurrentViewModel;
+        public MainViewModel(NavigationStore navigationStore)
         {
-            CurrentViewModel = new ReservationListingViewModel();
+            _NavigationStore = navigationStore;
         }
     }
 }
