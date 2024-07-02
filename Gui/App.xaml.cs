@@ -18,12 +18,20 @@ namespace Gui
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            _NavigationStore.CurrentViewModel = new ReservationListingViewModel(_NavigationStore);
+            _NavigationStore.CurrentViewModel = ProvideReservationListViewModel();
+
+
             MainWindow = new MainWindow() { DataContext = new MainViewModel(_NavigationStore) };
             MainWindow.Show();
 
             //base.OnStartup(e);
         }
+        private MakeReservationViewModel ProvideMakeReservationViewModel()
+            => new MakeReservationViewModel(_Hotel, _NavigationStore, ProvideReservationListViewModel);
+
+        private ReservationListingViewModel ProvideReservationListViewModel()
+            => new ReservationListingViewModel(_Hotel, _NavigationStore, ProvideMakeReservationViewModel);
+
     }
 
 }

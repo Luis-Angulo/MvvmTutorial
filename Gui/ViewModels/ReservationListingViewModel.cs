@@ -1,4 +1,5 @@
-﻿using Gui.Stores;
+﻿using Domain.Models;
+using Gui.Stores;
 using Gui.ViewModels.Abstractions;
 using Gui.ViewModels.Commands;
 using System.Collections.ObjectModel;
@@ -11,14 +12,23 @@ namespace Gui.ViewModels
         private ObservableCollection<ReservationViewModel> _Reservations;
         public IEnumerable<ReservationViewModel> Reservations => _Reservations;
         public ICommand MakeReservationCommand { get; }
-        public ReservationListingViewModel(NavigationStore navStore)
+        private Hotel _Hotel { get; }
+        public ReservationListingViewModel(Hotel hotel, NavigationStore navStore, Func<MakeReservationViewModel> viewModelProvider)
         {
             _Reservations = new ObservableCollection<ReservationViewModel>();
-            MakeReservationCommand = new NavigateCommand(navStore);
-            // TODO: Remove Test Data
-            _Reservations.Add(new ReservationViewModel(new("Luis", new(12, 24), DateTime.Now, DateTime.Now)));
-            _Reservations.Add(new ReservationViewModel(new("Paco", new(12, 32), DateTime.Now, DateTime.Now)));
-            _Reservations.Add(new ReservationViewModel(new("Pablo", new(12, 16), DateTime.Now, DateTime.Now)));
+            MakeReservationCommand = new NavigateCommand(navStore, viewModelProvider);
+            _Hotel = hotel;
+
+            UpdateReservations();
+        }
+        private void UpdateReservations()
+        {
+            _Reservations.Clear();  // Don't know why Sean does this, it's supposed to be empty at this point
+
+            foreach (var res in _Hotel.GetAllReservations())
+            {
+                _Reservations.Add(new(res));
+            }
         }
     }
 }

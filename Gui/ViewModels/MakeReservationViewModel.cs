@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Gui.Stores;
 using Gui.ViewModels.Abstractions;
 using Gui.ViewModels.Commands;
 using System.Windows.Input;
@@ -60,10 +61,10 @@ namespace Gui.ViewModels
         public ICommand SubmitCommand { get; }
         public ICommand CancelCommand { get; }
 
-        public MakeReservationViewModel(Hotel hotel)
+        public MakeReservationViewModel(Hotel hotel, NavigationStore navigationStore, Func<ReservationListingViewModel> viewModelProvider)
         {   
             SubmitCommand = new MakeReservationCommand(hotel, this);
-            CancelCommand = new CancelReservationCommand();
+            CancelCommand = new NavigateCommand(navigationStore, viewModelProvider);
             _StartDate = DateTime.Now;
             _EndDate = DateTime.Now.AddDays(1);
         }

@@ -35,7 +35,7 @@
                      Margin="0,5,0,0"
                      Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
-        
+
         <!-- Floor and room number control group -->
         <Grid Grid.Row="2"
               Margin="0,10,0,0">
@@ -106,8 +106,10 @@
         <StackPanel Grid.Row="4"
                     Margin="0,25,0,0"
                     Orientation="Horizontal">
-            <Button Content="Submit" Command="{Binding SubmitCommand}" />
+            <Button Content="Submit"
+                    Command="{Binding SubmitCommand}" />
             <Button Content="Cancel"
+                    Command="{Binding CancelCommand}"
                     Margin="10,0,0,0" />
         </StackPanel>
 
