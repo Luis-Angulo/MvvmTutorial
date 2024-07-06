@@ -56,7 +56,7 @@ namespace Gui
                 );
 
         private ReservationListingViewModel ProvideReservationListViewModel()
-            => new ReservationListingViewModel(
+            => ReservationListingViewModel.LoadViewModel(
                 _Hotel
                 , new(_NavigationStore, ProvideMakeReservationViewModel)
                 );

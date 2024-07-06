@@ -12,20 +12,25 @@ namespace Gui.ViewModels
         private ObservableCollection<ReservationViewModel> _Reservations;
         public IEnumerable<ReservationViewModel> Reservations => _Reservations;
         public ICommand MakeReservationCommand { get; }
-        private Hotel _Hotel { get; }
-        public ReservationListingViewModel(Hotel hotel, NavigationService navigationService)
+        public ICommand LoadReservationsCommand { get; }
+        private ReservationListingViewModel(Hotel hotel, NavigationService navigationService)
         {
             _Reservations = new ObservableCollection<ReservationViewModel>();
-            MakeReservationCommand = new NavigateCommand(navigationService);
-            _Hotel = hotel;
 
-            UpdateReservations();
+            MakeReservationCommand = new NavigateCommand(navigationService);
+            LoadReservationsCommand = new LoadReservationsCommand(hotel, this);
         }
-        private void UpdateReservations()
+        public static ReservationListingViewModel LoadViewModel(Hotel hotel, NavigationService navigationService)
+        {
+            var viewModel = new ReservationListingViewModel(hotel, navigationService);
+            viewModel.LoadReservationsCommand.Execute(null);
+            return viewModel;
+        }
+        public void UpdateReservations(IEnumerable<Reservation> reservations)
         {
             _Reservations.Clear();  // Don't know why Sean does this, it's supposed to be empty at this point
 
-            foreach (var res in _Hotel.GetAllReservations())
+            foreach (var res in reservations)
             {
                 _Reservations.Add(new(res));
             }

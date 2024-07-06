@@ -6,7 +6,7 @@ using System.Windows;
 
 namespace Gui.ViewModels.Commands
 {
-    public class MakeReservationCommand : CommandBase
+    public class MakeReservationCommand : AsyncCommandBase
     {
         private readonly Hotel _Hotel;
         private readonly MakeReservationViewModel _Vm;
@@ -25,7 +25,7 @@ namespace Gui.ViewModels.Commands
                 && _Vm.FloorNumber > 0
                 && base.CanExecute(parameter);
         }
-        public override void Execute(object? parameter)
+        public async override Task ExecuteAsync(object? parameter)
         {
             var res = new Reservation(
                 _Vm.UserName
@@ -35,7 +35,7 @@ namespace Gui.ViewModels.Commands
                 );
             try
             {
-                _Hotel.MakeReservation(res);
+                await _Hotel.MakeReservation(res);
                 MessageBox.Show(
                     "Reservation created"
                     , "Success"
@@ -48,6 +48,15 @@ namespace Gui.ViewModels.Commands
             {
                 MessageBox.Show(
                     "This room is already taken"
+                    , "Error"
+                    , MessageBoxButton.OK
+                    , MessageBoxImage.Error
+                    );
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Failed to make reservation"
                     , "Error"
                     , MessageBoxButton.OK
                     , MessageBoxImage.Error

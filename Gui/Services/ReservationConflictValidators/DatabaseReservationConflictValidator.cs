@@ -23,7 +23,10 @@ namespace Gui.Services.ReservationConflictValidators
                     .Where(r => r.EndTime > newRes.StartTime)
                     .Where(r => r.StartTime < newRes.EndTime)
                     .FirstOrDefaultAsync();
-
+                if (dto == null)
+                {
+                    return null;
+                }
                 return new Reservation(
                     dto.UserName
                     , new(dto.FloorNumber, dto.RoomNumber)
