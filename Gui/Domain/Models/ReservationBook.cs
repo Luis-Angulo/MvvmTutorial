@@ -1,30 +1,36 @@
 ﻿using Domain.Exceptions;
+using Gui.Services.ReservationConflictValidators;
+using Gui.Services.ReservationCreators;
+using Gui.Services.ReservationProviders;
 
 namespace Domain.Models
 {
     public class ReservationBook
     {
-        private readonly List<Reservation> _Reservations;
+        private readonly IReservationProvider _reservationProvider;
+        private readonly IReservationCreator _reservationCreator;
+        private readonly IReservationConflictValidator _reservationConflictValidator;
 
-        public ReservationBook()
+        public ReservationBook(IReservationProvider reservationProvider, IReservationCreator reservationCreator, IReservationConflictValidator reservationConflictValidator)
         {
-            _Reservations = [];
+            _reservationProvider = reservationProvider;
+            _reservationCreator = reservationCreator;
+            _reservationConflictValidator = reservationConflictValidator;
         }
-        public IEnumerable<Reservation> GetAllReservations() =>
-            _Reservations;
 
-        public void AddReservation(Reservation newReservation)
+        public async Task<IEnumerable<Reservation>> GetAllReservations() =>
+            await _reservationProvider.GetAllReservations();
+
+        public async Task AddReservation(Reservation newReservation)
         {
-            // Check all reservations, if a conflict is found, throw an exception
-            foreach (var existingReservation in _Reservations)
+            var conflicting = await _reservationConflictValidator.GetConflictingReservation(newReservation);
+
+            if (conflicting != null)
             {
-                if (existingReservation.Conflicts(newReservation))
-                {
-                    throw new ReservationConflictException(existingReservation, newReservation);
-                }
+                throw new ReservationConflictException(conflicting, newReservation);
             }
             // else add the new reservation
-            _Reservations.Add(newReservation);
+            await _reservationCreator.CreateReservation(newReservation);
         }
 
 

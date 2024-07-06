@@ -4,16 +4,16 @@
     {
         private readonly ReservationBook _ReservationBook;
         public string Name { get; }
-        public Hotel(string name)
+        public Hotel(string name, ReservationBook reservationBook)
         {
             Name = name;
-            _ReservationBook = new();
+            _ReservationBook = reservationBook;
         }
-        public IEnumerable<Reservation> GetAllReservations()
-            => _ReservationBook.GetAllReservations();
+        public async Task<IEnumerable<Reservation>> GetAllReservations()
+            => await _ReservationBook.GetAllReservations();
 
-        public void MakeReservation(Reservation reservation)
-            => _ReservationBook.AddReservation(reservation);
+        public async Task MakeReservation(Reservation reservation)
+            => await _ReservationBook.AddReservation(reservation);
 
     }
 }
