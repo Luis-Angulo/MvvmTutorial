@@ -19,6 +19,16 @@ namespace Gui.Stores
         {
             await _initializeLazy.Value;
         }
+        /// <summary>
+        /// Adds a reservation to the backing database and to the backing in memory store
+        /// </summary>
+        /// <param name="res">new reservation to add</param>
+        /// <returns>Task</returns>
+        public async Task MakeReservation(Reservation res)
+        {
+            await _hotel.MakeReservation(res);
+            _reservations.Add(res);
+        }
         private async Task Initialize()
         {
             IEnumerable<Reservation> reservations = await _hotel.GetAllReservations();

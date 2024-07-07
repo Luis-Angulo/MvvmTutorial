@@ -1,5 +1,4 @@
-﻿using Domain.Models;
-using Gui.Services;
+﻿using Gui.Services;
 using Gui.Stores;
 using Gui.ViewModels.Abstractions;
 using Gui.ViewModels.Commands;
@@ -9,13 +8,13 @@ namespace Gui.ViewModels
 {
     public class MakeReservationViewModel : ViewModelBase
     {
-        private string? _UserName;
+        private string? _userName;
         public string UserName
         {
-            get => _UserName;
+            get => _userName;
             set
             {
-                _UserName = value;
+                _userName = value;
                 OnPropertyChanged(nameof(UserName));
             }
         }
@@ -61,10 +60,9 @@ namespace Gui.ViewModels
         }
         public ICommand SubmitCommand { get; }
         public ICommand CancelCommand { get; }
-
-        public MakeReservationViewModel(Hotel hotel, NavigationService navigationService)
+        public MakeReservationViewModel(HotelStore hotelStore, NavigationService navigationService)
         {   
-            SubmitCommand = new MakeReservationCommand(hotel, this, navigationService);
+            SubmitCommand = new MakeReservationCommand(hotelStore, this, navigationService);
             CancelCommand = new NavigateCommand(navigationService);
             _StartDate = DateTime.Now;
             _EndDate = DateTime.Now.AddDays(1);

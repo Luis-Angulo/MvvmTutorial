@@ -53,7 +53,7 @@ namespace Gui
 
         private MakeReservationViewModel ProvideMakeReservationViewModel()
             => new MakeReservationViewModel(
-                _hotel
+                _hotelStore
                 , new(_navigationStore, ProvideReservationListViewModel)
                 );
 
