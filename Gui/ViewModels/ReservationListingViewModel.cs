@@ -1,5 +1,6 @@
 ﻿using Domain.Models;
 using Gui.Services;
+using Gui.Stores;
 using Gui.ViewModels.Abstractions;
 using Gui.ViewModels.Commands;
 using System.Collections.ObjectModel;
@@ -9,30 +10,30 @@ namespace Gui.ViewModels
 {
     public class ReservationListingViewModel : ViewModelBase
     {
-        private ObservableCollection<ReservationViewModel> _Reservations;
-        public IEnumerable<ReservationViewModel> Reservations => _Reservations;
+        private ObservableCollection<ReservationViewModel> _reservations;
+        public IEnumerable<ReservationViewModel> Reservations => _reservations;
         public ICommand MakeReservationCommand { get; }
         public ICommand LoadReservationsCommand { get; }
-        private ReservationListingViewModel(Hotel hotel, NavigationService navigationService)
+        private ReservationListingViewModel(HotelStore hotelStore, NavigationService navigationService)
         {
-            _Reservations = new ObservableCollection<ReservationViewModel>();
+            _reservations = new ObservableCollection<ReservationViewModel>();
 
             MakeReservationCommand = new NavigateCommand(navigationService);
-            LoadReservationsCommand = new LoadReservationsCommand(hotel, this);
+            LoadReservationsCommand = new LoadReservationsCommand(hotelStore, this);
         }
-        public static ReservationListingViewModel LoadViewModel(Hotel hotel, NavigationService navigationService)
+        public static ReservationListingViewModel LoadViewModel(HotelStore hotelStore, NavigationService navigationService)
         {
-            var viewModel = new ReservationListingViewModel(hotel, navigationService);
+            var viewModel = new ReservationListingViewModel(hotelStore, navigationService);
             viewModel.LoadReservationsCommand.Execute(null);
             return viewModel;
         }
         public void UpdateReservations(IEnumerable<Reservation> reservations)
         {
-            _Reservations.Clear();  // Don't know why Sean does this, it's supposed to be empty at this point
+            _reservations.Clear();  // Don't know why Sean does this, it's supposed to be empty at this point
 
             foreach (var res in reservations)
             {
-                _Reservations.Add(new(res));
+                _reservations.Add(new(res));
             }
         }
     }

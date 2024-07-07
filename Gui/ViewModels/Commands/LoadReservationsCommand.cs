@@ -1,17 +1,16 @@
-﻿
-using Domain.Models;
+﻿using Gui.Stores;
 using System.Windows;
 
 namespace Gui.ViewModels.Commands
 {
     public class LoadReservationsCommand : AsyncCommandBase
     {
-        private readonly Hotel _hotel;
+        private readonly HotelStore _hotelStore;
         private readonly ReservationListingViewModel _viewModel;
 
-        public LoadReservationsCommand(Hotel hotel, ReservationListingViewModel viewModel)
+        public LoadReservationsCommand(HotelStore hotelStore, ReservationListingViewModel viewModel)
         {
-            _hotel = hotel;
+            _hotelStore = hotelStore;
             _viewModel = viewModel;
         }
 
@@ -20,8 +19,8 @@ namespace Gui.ViewModels.Commands
             
             try
             {
-                IEnumerable<Reservation> reservations = await _hotel.GetAllReservations();
-                _viewModel.UpdateReservations(reservations);
+                await _hotelStore.Load();
+                _viewModel.UpdateReservations(_hotelStore.Reservations);
             } catch (Exception ex)
             {
                 MessageBox.Show(

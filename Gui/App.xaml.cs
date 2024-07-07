@@ -13,8 +13,9 @@ namespace Gui
     public partial class App : Application
     {
         private const string CONN_STRING = "Data Source=reserveroom.db";
-        private Hotel _Hotel;
-        private NavigationStore _NavigationStore;
+        private Hotel _hotel;
+        private HotelStore _hotelStore;
+        private NavigationStore _navigationStore;
         private ReserveRoomDbContextFactory _dbContextFactory;
 
         public App()
@@ -25,17 +26,18 @@ namespace Gui
                 , new DatabaseReservationCreator(_dbContextFactory)
                 , new DatabaseReservationConflictValidator(_dbContextFactory)
                 );
-            _Hotel = new("Casa de Marco", resBook);
-            _NavigationStore = new NavigationStore();
+            _hotel = new("Casa de Marco", resBook);
+            _hotelStore = new HotelStore(_hotel);
+            _navigationStore = new NavigationStore();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             GenerateDbContext();
-            _NavigationStore.CurrentViewModel = ProvideReservationListViewModel();
+            _navigationStore.CurrentViewModel = ProvideReservationListViewModel();
 
 
-            MainWindow = new MainWindow() { DataContext = new MainViewModel(_NavigationStore) };
+            MainWindow = new MainWindow() { DataContext = new MainViewModel(_navigationStore) };
             MainWindow.Show();
 
             //base.OnStartup(e);
@@ -51,14 +53,14 @@ namespace Gui
 
         private MakeReservationViewModel ProvideMakeReservationViewModel()
             => new MakeReservationViewModel(
-                _Hotel
-                , new(_NavigationStore, ProvideReservationListViewModel)
+                _hotel
+                , new(_navigationStore, ProvideReservationListViewModel)
                 );
 
         private ReservationListingViewModel ProvideReservationListViewModel()
             => ReservationListingViewModel.LoadViewModel(
-                _Hotel
-                , new(_NavigationStore, ProvideMakeReservationViewModel)
+                _hotelStore
+                , new(_navigationStore, ProvideMakeReservationViewModel)
                 );
 
     }
