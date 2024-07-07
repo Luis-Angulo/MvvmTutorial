@@ -8,6 +8,7 @@ namespace Gui.Stores
         private readonly List<Reservation> _reservations;
         private readonly Hotel _hotel;
         private readonly Lazy<Task> _initializeLazy;
+        public event Action<Reservation>? ReservationMade;
         public IEnumerable<Reservation> Reservations => _reservations;
         public HotelStore(Hotel hotel)
         {
@@ -28,6 +29,11 @@ namespace Gui.Stores
         {
             await _hotel.MakeReservation(res);
             _reservations.Add(res);
+            OnReservationMade(res);
+        }
+        private void OnReservationMade(Reservation res)
+        {
+            ReservationMade?.Invoke(res);
         }
         private async Task Initialize()
         {

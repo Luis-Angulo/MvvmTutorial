@@ -12,6 +12,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" /> <!-- TEMP -->
         </Grid.RowDefinitions>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -81,5 +82,9 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <!-- TEMP -->
+        <local:MakeReservationView Grid.Row="2"
+                                   Margin="0,20"
+                                   DataContext="{Binding MakeReservationViewModel}" />
     </Grid>
 </UserControl>
