@@ -16,6 +16,15 @@ namespace Gui.ViewModels
         public IEnumerable<ReservationViewModel> Reservations => _reservations;
         public ICommand MakeReservationCommand { get; }
         public ICommand LoadReservationsCommand { get; }
+        private bool _isLoading;
+        public bool IsLoading  // Controls loading spinner animation
+        {
+            get { return _isLoading; }
+            set { 
+                _isLoading = value;
+                OnPropertyChanged(nameof(IsLoading));
+            }
+        }
         private ReservationListingViewModel(HotelStore hotelStore, NavigationService navigationService)
         {
             _hotelStore = hotelStore;

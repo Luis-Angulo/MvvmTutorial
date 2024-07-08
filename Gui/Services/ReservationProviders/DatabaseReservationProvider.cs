@@ -19,6 +19,10 @@ namespace Gui.Services.ReservationProviders
             using(var dbContext = _dbContextFactory.CreateDbContext())
             {
                 IEnumerable<ReservationDTO> dtos = await dbContext.Reservations.ToListAsync();
+
+                // TEMP - Create artifical delay to show loading animations
+                await Task.Delay(2000);
+
                 // Mapping DTOs to entities with LINQ
                 return dtos.Select(r => new Reservation(
                     r.UserName

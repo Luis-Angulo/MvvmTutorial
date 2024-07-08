@@ -16,7 +16,7 @@ namespace Gui.ViewModels.Commands
 
         public override async Task ExecuteAsync(object? parameter)
         {
-            
+            _viewModel.IsLoading = true;
             try
             {
                 await _hotelStore.Load();
@@ -30,6 +30,7 @@ namespace Gui.ViewModels.Commands
                     , MessageBoxImage.Error
                     );
             }
+            _viewModel.IsLoading = false;
         }
     }
 }
