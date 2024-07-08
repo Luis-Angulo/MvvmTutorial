@@ -4,13 +4,14 @@ namespace Gui.Stores
 {
     public class NavigationStore
     {
-        private ViewModelBase? _CurrentViewModel;
+        private ViewModelBase? _currentViewModel;
 
         public ViewModelBase CurrentViewModel
         {
-            get { return _CurrentViewModel; }
-            set { 
-                _CurrentViewModel = value;
+            get { return _currentViewModel; }
+            set {
+                _currentViewModel?.Dispose();
+                _currentViewModel = value;
                 OnCurrentViewModelChange();
             }
         }

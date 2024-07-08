@@ -11,43 +11,32 @@ namespace Gui.ViewModels
     public class ReservationListingViewModel : ViewModelBase
     {
         private ObservableCollection<ReservationViewModel> _reservations;
+        private readonly HotelStore _hotelStore;
+
         public IEnumerable<ReservationViewModel> Reservations => _reservations;
         public ICommand MakeReservationCommand { get; }
         public ICommand LoadReservationsCommand { get; }
-        // UNCOMMENT
-        //private ReservationListingViewModel(HotelStore hotelStore, NavigationService navigationService)
-        //{
-        //    _reservations = new ObservableCollection<ReservationViewModel>();
-
-        //    MakeReservationCommand = new NavigateCommand(navigationService);
-        //    LoadReservationsCommand = new LoadReservationsCommand(hotelStore, this);
-        //}
-        //public static ReservationListingViewModel LoadViewModel(HotelStore hotelStore, NavigationService navigationService)
-        //{
-        //    var viewModel = new ReservationListingViewModel(hotelStore, navigationService);
-        //    viewModel.LoadReservationsCommand.Execute(null);
-        //    return viewModel;
-        //}
-        public MakeReservationViewModel MakeReservationViewModel { get; } // TEMP
-        private ReservationListingViewModel(HotelStore hotelStore, NavigationService navigationService, MakeReservationViewModel makeReservationViewModel) // TEMP
+        private ReservationListingViewModel(HotelStore hotelStore, NavigationService navigationService)
         {
+            _hotelStore = hotelStore;
+            _hotelStore.ReservationMade += OnReservationMade;
             _reservations = new ObservableCollection<ReservationViewModel>();
-            MakeReservationViewModel = makeReservationViewModel;
 
             MakeReservationCommand = new NavigateCommand(navigationService);
             LoadReservationsCommand = new LoadReservationsCommand(hotelStore, this);
-
-            hotelStore.ReservationMade += OnReservationMade;
+        }        
+        public override void Dispose()
+        {
+            _hotelStore.ReservationMade -= OnReservationMade;  // Prevents memory leaks
+            base.Dispose();
         }
-
         private void OnReservationMade(Reservation reservation)
         {
             _reservations.Add(new ReservationViewModel(reservation));
         }
-
-        public static ReservationListingViewModel LoadViewModel(HotelStore hotelStore, NavigationService navigationService, MakeReservationViewModel makeReservationViewModel) // TEMP
+        public static ReservationListingViewModel LoadViewModel(HotelStore hotelStore, NavigationService navigationService)
         {
-            var viewModel = new ReservationListingViewModel(hotelStore, navigationService, makeReservationViewModel);
+            var viewModel = new ReservationListingViewModel(hotelStore, navigationService);
             viewModel.LoadReservationsCommand.Execute(null);
             return viewModel;
         }

@@ -45,7 +45,7 @@ namespace Gui.ViewModels.Commands
                     , MessageBoxImage.Information
                     );
 
-                // _navigationService.Navigate();  // Temp setup for store reactivity test
+                _navigationService.Navigate();
             }
             catch (ReservationConflictException)
             {

@@ -9,11 +9,10 @@
         mc:Ignorable="d"
         Title="MainWindow"
         FontSize="14"
-        Height="800"
+        Height="450"
         Width="800">
     <Grid Margin="20,10"
           MaxWidth="600">
-        <!-- TEMP change Height from 800 to 450 -->
         <Grid.Resources>
             <!-- Mapping the ViewModels to Views so XAML loaders can inject the VMs and instanciate the Views correctly -->
             <DataTemplate DataType="{x:Type vms:MakeReservationViewModel }">

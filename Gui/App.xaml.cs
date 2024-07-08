@@ -56,17 +56,10 @@ namespace Gui
                 _hotelStore
                 , new(_navigationStore, ProvideReservationListViewModel)
                 );
-        // UNCOMMENT
-        //private ReservationListingViewModel ProvideReservationListViewModel()
-        //    => ReservationListingViewModel.LoadViewModel(
-        //        _hotelStore
-        //        , new(_navigationStore, ProvideMakeReservationViewModel)
-        //        );
-        private ReservationListingViewModel ProvideReservationListViewModel() // TEMP
+        private ReservationListingViewModel ProvideReservationListViewModel()
             => ReservationListingViewModel.LoadViewModel(
                 _hotelStore
                 , new(_navigationStore, ProvideMakeReservationViewModel)
-                , ProvideMakeReservationViewModel()
                 );
 
     }

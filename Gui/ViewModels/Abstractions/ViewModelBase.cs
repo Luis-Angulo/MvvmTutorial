@@ -10,5 +10,6 @@ namespace Gui.ViewModels.Abstractions
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        public virtual void Dispose() { }
     }
 }
