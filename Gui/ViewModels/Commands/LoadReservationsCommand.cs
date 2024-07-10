@@ -17,18 +17,15 @@ namespace Gui.ViewModels.Commands
         public override async Task ExecuteAsync(object? parameter)
         {
             _viewModel.IsLoading = true;
+            _viewModel.ErrorMessage = string.Empty;
             try
             {
                 await _hotelStore.Load();
+                // throw new Exception("");  // Manually throw exception to test error message on ViewModels
                 _viewModel.UpdateReservations(_hotelStore.Reservations);
             } catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Failed to load reservations"
-                    , "Error"
-                    , MessageBoxButton.OK
-                    , MessageBoxImage.Error
-                    );
+                _viewModel.ErrorMessage = "Failed to load reservations";
             }
             _viewModel.IsLoading = false;
         }

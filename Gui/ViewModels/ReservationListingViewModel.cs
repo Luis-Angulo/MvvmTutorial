@@ -12,7 +12,18 @@ namespace Gui.ViewModels
     {
         private ObservableCollection<ReservationViewModel> _reservations;
         private readonly HotelStore _hotelStore;
+        private string _errorMessage;
 
+        public string ErrorMessage
+        {
+            get { return _errorMessage; }
+            set { 
+                _errorMessage = value;
+                OnPropertyChanged(nameof(ErrorMessage));
+                OnPropertyChanged(nameof(HasErrorMessage));
+            }
+        }
+        public bool HasErrorMessage => !string.IsNullOrEmpty(_errorMessage);
         public IEnumerable<ReservationViewModel> Reservations => _reservations;
         public ICommand MakeReservationCommand { get; }
         public ICommand LoadReservationsCommand { get; }
