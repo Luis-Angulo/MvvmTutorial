@@ -7,7 +7,7 @@ namespace Gui.Stores
     {
         private readonly List<Reservation> _reservations;
         private readonly Hotel _hotel;
-        private readonly Lazy<Task> _initializeLazy;
+        private Lazy<Task> _initializeLazy;
         public event Action<Reservation>? ReservationMade;
         public IEnumerable<Reservation> Reservations => _reservations;
         public HotelStore(Hotel hotel)
@@ -18,7 +18,15 @@ namespace Gui.Stores
         }
         public async Task Load()
         {
-            await _initializeLazy.Value;
+            try
+            {
+                await _initializeLazy.Value;
+            }
+            catch (Exception)
+            {
+                _initializeLazy = new Lazy<Task>(Initialize);
+                throw;
+            }
         }
         /// <summary>
         /// Adds a reservation to the backing database and to the backing in memory store

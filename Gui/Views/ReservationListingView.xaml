@@ -40,7 +40,7 @@
               Margin="0,25,0,0">
             <custom:LoadingSpinner Thickness="5"
                                    Diameter="100"
-                                   Color="Gray"
+                                   Color="Black"
                                    IsLoading="{Binding IsLoading}" />
             <Grid Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                 <TextBlock Foreground="Red"
