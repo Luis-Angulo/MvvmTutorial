@@ -47,7 +47,15 @@ namespace Gui.ViewModels
             set
             {
                 _StartDate = value;
-                OnPropertyChanged(nameof(StartDate));
+                var propName = nameof(StartDate);  // Friedlier to refactors than HC string
+                ClearErrors(propName);  // Clear previous errors
+                ClearErrors(nameof(EndDate));
+                if (EndDate < StartDate)
+                {
+                    var errorMessage = "Reservation StartDate cannot be after EndDate";
+                    AddError(errorMessage, propName);
+                }
+                OnPropertyChanged(propName);
             }
         }
         private DateTime _EndDate;
@@ -57,18 +65,41 @@ namespace Gui.ViewModels
             set
             {
                 _EndDate = value;
-                _propertyNameToErrorsDictionary.Remove(nameof(EndDate));  // Clear previous errors
-                if(EndDate < StartDate)
+                var propName = nameof(EndDate);  // Friedlier to refactors than HC string
+                ClearErrors(propName);  // Clear previous errors
+                ClearErrors(nameof(StartDate));
+                if (EndDate < StartDate)
                 {
-                    var endDateErrors = new List<string>() { 
-                        "Reservation EndDate cannot be prior than StartDate"
-                    };
-                    _propertyNameToErrorsDictionary.Add(nameof(EndDate), endDateErrors);
-                    ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(nameof(EndDate)));
+                    var errorMessage = "Reservation EndDate cannot be before StartDate";
+                    AddError(errorMessage, propName);
                 }
-                OnPropertyChanged(nameof(EndDate));
+                OnPropertyChanged(propName);
             }
         }
+
+        private void AddError(string errorMessage, string propertyName)
+        {
+            if (!_propertyNameToErrorsDictionary.ContainsKey(propertyName))
+            {
+                _propertyNameToErrorsDictionary.Add(propertyName, new List<string>() { });
+            }
+            _propertyNameToErrorsDictionary[propertyName].Add(errorMessage);
+            OnErrorsChanged(nameof(EndDate));
+        }
+
+        private void OnErrorsChanged(string propertyName)
+        {
+            // Implementing INotifyDataErrorInfo allows hooking into error handling built into the WPF component model
+            // This fires off an event that notifies the component model that there's a bad data error in a UserControl component
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        }
+
+        private void ClearErrors(string propertyName)
+        {
+            _propertyNameToErrorsDictionary.Remove(propertyName);
+            OnErrorsChanged(propertyName);
+        }
+
         public ICommand SubmitCommand { get; }
         public ICommand CancelCommand { get; }
         public MakeReservationViewModel(HotelStore hotelStore, NavigationService navigationService)
