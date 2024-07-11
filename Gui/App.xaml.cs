@@ -7,6 +7,7 @@ using Gui.Services.ReservationProviders;
 using Gui.Stores;
 using Gui.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Windows;
@@ -14,17 +15,18 @@ using System.Windows;
 namespace Gui
 {
     public partial class App : Application
-    {
-        private const string CONN_STRING = "Data Source=reserveroom.db";
+    {   
         private readonly IHost _host;
 
         public App()
         {
             // Subbing bespoke instanciation of dependencies for DI using the generic Host is just moving everything to the host and then asking it for instances
             _host = Host.CreateDefaultBuilder()
-                .ConfigureServices(s =>
+                .ConfigureServices((ctx, s) =>
                 {
-                    s.AddSingleton(new ReserveRoomDbContextFactory(CONN_STRING));
+                    var connectionString = ctx.Configuration.GetConnectionString("Default");
+
+                    s.AddSingleton(new ReserveRoomDbContextFactory(connectionString));
                     s.AddSingleton<IReservationProvider, DatabaseReservationProvider>();
                     s.AddSingleton<IReservationCreator, DatabaseReservationCreator>();
                     s.AddSingleton<IReservationConflictValidator, DatabaseReservationConflictValidator>();
