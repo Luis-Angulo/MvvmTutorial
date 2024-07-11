@@ -3,12 +3,12 @@ using Gui.ViewModels.Abstractions;
 
 namespace Gui.Services
 {
-    public class NavigationService
+    public class NavigationService<TViewModel> where TViewModel : ViewModelBase
     {
         private readonly NavigationStore _NavigationStore;
-        private readonly Func<ViewModelBase> _ViewModelProvider;
+        private readonly Func<TViewModel> _ViewModelProvider;
 
-        public NavigationService(NavigationStore navigationStore, Func<ViewModelBase> viewModelProvider)
+        public NavigationService(NavigationStore navigationStore, Func<TViewModel> viewModelProvider)
         {
             _NavigationStore = navigationStore;
             _ViewModelProvider = viewModelProvider;

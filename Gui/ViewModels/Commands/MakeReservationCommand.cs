@@ -11,9 +11,12 @@ namespace Gui.ViewModels.Commands
     {
         private readonly HotelStore _hotelStore;
         private readonly MakeReservationViewModel _vm;
-        private readonly NavigationService _navigationService;
+        private readonly NavigationService<ReservationListingViewModel> _navigationService;
 
-        public MakeReservationCommand(HotelStore hotelStore, MakeReservationViewModel vm, NavigationService navigationService)
+        public MakeReservationCommand(
+            HotelStore hotelStore
+            , MakeReservationViewModel vm
+            , NavigationService<ReservationListingViewModel> navigationService)
         {
             _hotelStore = hotelStore;
             _vm = vm;

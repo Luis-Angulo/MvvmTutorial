@@ -1,11 +1,14 @@
 ﻿using Domain.Models;
 using Gui.DbContexts;
+using Gui.Services;
 using Gui.Services.ReservationConflictValidators;
 using Gui.Services.ReservationCreators;
 using Gui.Services.ReservationProviders;
 using Gui.Stores;
 using Gui.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System.Windows;
 
 namespace Gui
@@ -13,55 +16,76 @@ namespace Gui
     public partial class App : Application
     {
         private const string CONN_STRING = "Data Source=reserveroom.db";
-        private Hotel _hotel;
-        private HotelStore _hotelStore;
-        private NavigationStore _navigationStore;
-        private ReserveRoomDbContextFactory _dbContextFactory;
+        private readonly IHost _host;
 
         public App()
         {
-            _dbContextFactory = new ReserveRoomDbContextFactory(CONN_STRING);
-            var resBook = new ReservationBook(
-                new DatabaseReservationProvider(_dbContextFactory)
-                , new DatabaseReservationCreator(_dbContextFactory)
-                , new DatabaseReservationConflictValidator(_dbContextFactory)
+            // Subbing bespoke instanciation of dependencies for DI using the generic Host is just moving everything to the host and then asking it for instances
+            _host = Host.CreateDefaultBuilder()
+                .ConfigureServices(s =>
+                {
+                    s.AddSingleton(new ReserveRoomDbContextFactory(CONN_STRING));
+                    s.AddSingleton<IReservationProvider, DatabaseReservationProvider>();
+                    s.AddSingleton<IReservationCreator, DatabaseReservationCreator>();
+                    s.AddSingleton<IReservationConflictValidator, DatabaseReservationConflictValidator>();
+
+                    s.AddTransient<ReservationBook>();  // Because in theory a Hotel could have different ReservationBook instances
+                    s.AddSingleton(s => new Hotel("Casa de Marco", s.GetRequiredService<ReservationBook>()));  // FactoryFunc to pass in string hotelName
+
+                    s.AddTransient<ReservationListingViewModel>(s => MakeReservationListingViewModel(s));
+                    s.AddSingleton((Func<IServiceProvider, Func<MakeReservationViewModel>>)((s) => () => s.GetRequiredService<MakeReservationViewModel>()));
+                    s.AddSingleton<NavigationService<ReservationListingViewModel>>();
+
+                    s.AddTransient<MakeReservationViewModel>();
+                    s.AddSingleton((Func<IServiceProvider, Func<ReservationListingViewModel>>)((s) => () => s.GetRequiredService<ReservationListingViewModel>()));
+                    s.AddSingleton<NavigationService<MakeReservationViewModel>>();
+
+                    s.AddSingleton<HotelStore>();
+                    s.AddSingleton<NavigationStore>();
+
+                    s.AddSingleton<MainViewModel>();
+                    s.AddSingleton(s => new MainWindow()
+                    {
+                        DataContext = s.GetRequiredService<MainViewModel>()
+                    });
+                }).Build();
+        }
+
+        private ReservationListingViewModel MakeReservationListingViewModel(IServiceProvider s)
+        {
+            return ReservationListingViewModel.LoadViewModel(
+                s.GetRequiredService<HotelStore>()
+                , s.GetRequiredService<NavigationService<MakeReservationViewModel>>()
                 );
-            _hotel = new("Casa de Marco", resBook);
-            _hotelStore = new HotelStore(_hotel);
-            _navigationStore = new NavigationStore();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            GenerateDbContext();
-            _navigationStore.CurrentViewModel = ProvideReservationListViewModel();
+            _host.Start();
+            GenerateDbContext(_host.Services.GetRequiredService<ReserveRoomDbContextFactory>());
+            var navigationService = _host.Services.GetRequiredService<NavigationService<ReservationListingViewModel>>();
+            navigationService.Navigate();
 
-
-            MainWindow = new MainWindow() { DataContext = new MainViewModel(_navigationStore) };
+            // TODO: Implement DI using host, follow https://www.youtube.com/watch?v=dgJ1nS2CLpQ @ 7:30, pending refactor of NavigationService to use Generic types
+            MainWindow = _host.Services.GetRequiredService<MainWindow>();
             MainWindow.Show();
 
             //base.OnStartup(e);
         }
 
-        private void GenerateDbContext()
+        protected override void OnExit(ExitEventArgs e)
         {
-            using (var dbContext = _dbContextFactory.CreateDbContext())
+            _host.Dispose();  // shut down host on exit
+            base.OnExit(e);
+        }
+
+        private void GenerateDbContext(ReserveRoomDbContextFactory dbContextFactory)
+        {
+            using (var dbContext = dbContextFactory.CreateDbContext())
             {
                 dbContext.Database.Migrate();
             }
         }
-
-        private MakeReservationViewModel ProvideMakeReservationViewModel()
-            => new MakeReservationViewModel(
-                _hotelStore
-                , new(_navigationStore, ProvideReservationListViewModel)
-                );
-        private ReservationListingViewModel ProvideReservationListViewModel()
-            => ReservationListingViewModel.LoadViewModel(
-                _hotelStore
-                , new(_navigationStore, ProvideMakeReservationViewModel)
-                );
-
     }
 
 }

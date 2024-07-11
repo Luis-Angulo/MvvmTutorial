@@ -102,10 +102,10 @@ namespace Gui.ViewModels
 
         public ICommand SubmitCommand { get; }
         public ICommand CancelCommand { get; }
-        public MakeReservationViewModel(HotelStore hotelStore, NavigationService navigationService)
+        public MakeReservationViewModel(HotelStore hotelStore, NavigationService<ReservationListingViewModel> navigationService)
         {
             SubmitCommand = new MakeReservationCommand(hotelStore, this, navigationService);
-            CancelCommand = new NavigateCommand(navigationService);
+            CancelCommand = new NavigateCommand<ReservationListingViewModel>(navigationService);
 
             _propertyNameToErrorsDictionary = new Dictionary<string, List<string>>();
             _StartDate = DateTime.Now;

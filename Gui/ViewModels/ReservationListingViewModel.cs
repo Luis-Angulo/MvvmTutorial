@@ -12,7 +12,7 @@ namespace Gui.ViewModels
     {
         private ObservableCollection<ReservationViewModel> _reservations;
         private readonly HotelStore _hotelStore;
-        private string _errorMessage;
+        private string? _errorMessage;
 
         public string ErrorMessage
         {
@@ -36,13 +36,13 @@ namespace Gui.ViewModels
                 OnPropertyChanged(nameof(IsLoading));
             }
         }
-        private ReservationListingViewModel(HotelStore hotelStore, NavigationService navigationService)
+        public ReservationListingViewModel(HotelStore hotelStore, NavigationService<MakeReservationViewModel> navigationService)
         {
             _hotelStore = hotelStore;
             _hotelStore.ReservationMade += OnReservationMade;
             _reservations = new ObservableCollection<ReservationViewModel>();
 
-            MakeReservationCommand = new NavigateCommand(navigationService);
+            MakeReservationCommand = new NavigateCommand<MakeReservationViewModel>(navigationService);
             LoadReservationsCommand = new LoadReservationsCommand(hotelStore, this);
         }        
         public override void Dispose()
@@ -54,7 +54,7 @@ namespace Gui.ViewModels
         {
             _reservations.Add(new ReservationViewModel(reservation));
         }
-        public static ReservationListingViewModel LoadViewModel(HotelStore hotelStore, NavigationService navigationService)
+        public static ReservationListingViewModel LoadViewModel(HotelStore hotelStore, NavigationService<MakeReservationViewModel> navigationService)
         {
             var viewModel = new ReservationListingViewModel(hotelStore, navigationService);
             viewModel.LoadReservationsCommand.Execute(null);
