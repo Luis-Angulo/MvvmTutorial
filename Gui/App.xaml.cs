@@ -1,5 +1,6 @@
 ﻿using Domain.Models;
 using Gui.DbContexts;
+using Gui.HostBuilders;
 using Gui.Services;
 using Gui.Services.ReservationConflictValidators;
 using Gui.Services.ReservationCreators;
@@ -15,16 +16,18 @@ using System.Windows;
 namespace Gui
 {
     public partial class App : Application
-    {   
+    {
         private readonly IHost _host;
 
         public App()
         {
             // Subbing bespoke instanciation of dependencies for DI using the generic Host is just moving everything to the host and then asking it for instances
             _host = Host.CreateDefaultBuilder()
+                .AddViewModels()  // Moved ViewModel setup to extension method
                 .ConfigureServices((ctx, s) =>
                 {
                     var connectionString = ctx.Configuration.GetConnectionString("Default");
+                    var hotelName = ctx.Configuration.GetValue<string>("HotelName");
 
                     s.AddSingleton(new ReserveRoomDbContextFactory(connectionString));
                     s.AddSingleton<IReservationProvider, DatabaseReservationProvider>();
@@ -32,33 +35,16 @@ namespace Gui
                     s.AddSingleton<IReservationConflictValidator, DatabaseReservationConflictValidator>();
 
                     s.AddTransient<ReservationBook>();  // Because in theory a Hotel could have different ReservationBook instances
-                    s.AddSingleton(s => new Hotel("Casa de Marco", s.GetRequiredService<ReservationBook>()));  // FactoryFunc to pass in string hotelName
-
-                    s.AddTransient<ReservationListingViewModel>(s => MakeReservationListingViewModel(s));
-                    s.AddSingleton((Func<IServiceProvider, Func<MakeReservationViewModel>>)((s) => () => s.GetRequiredService<MakeReservationViewModel>()));
-                    s.AddSingleton<NavigationService<ReservationListingViewModel>>();
-
-                    s.AddTransient<MakeReservationViewModel>();
-                    s.AddSingleton((Func<IServiceProvider, Func<ReservationListingViewModel>>)((s) => () => s.GetRequiredService<ReservationListingViewModel>()));
-                    s.AddSingleton<NavigationService<MakeReservationViewModel>>();
+                    s.AddSingleton(s => new Hotel(hotelName, s.GetRequiredService<ReservationBook>()));  // FactoryFunc to pass in string hotelName
 
                     s.AddSingleton<HotelStore>();
                     s.AddSingleton<NavigationStore>();
 
-                    s.AddSingleton<MainViewModel>();
                     s.AddSingleton(s => new MainWindow()
                     {
                         DataContext = s.GetRequiredService<MainViewModel>()
                     });
                 }).Build();
-        }
-
-        private ReservationListingViewModel MakeReservationListingViewModel(IServiceProvider s)
-        {
-            return ReservationListingViewModel.LoadViewModel(
-                s.GetRequiredService<HotelStore>()
-                , s.GetRequiredService<NavigationService<MakeReservationViewModel>>()
-                );
         }
 
         protected override void OnStartup(StartupEventArgs e)
